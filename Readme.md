@@ -1,12 +1,19 @@
 ## Notes as I go along:
 
-- Haven't built a rails app from scratch in... years. My experience has been mostly
-front-end, but much more full-stack at my previous job (Chalk).
+- Haven't built a rails app from scratch in... years. My experience has been
+  mostly front-end, but much more full-stack at my previous job (Chalk).
 - Cleaning up default `Gemfile` found out about `Jbuilder`. This is probably
-something that would be useful for this exercise - but I will forgo learning about
-it as it seems like a rabbit hole that might take up more time than two hours
-allotted.
--
+  something that would be useful for this exercise - but I will forgo learning
+  about it as it seems like a rabbit hole that might take up more time than two
+  hours allotted.
+
+#### Onwards to the actual exercise.
+
+- Being a front-ender, I would probably want an index page of some sort to allow
+  testing the calls. However, that's "extra credit", so will leave it to the end
+  after I've used up my 2h following the instructions.
+- Seems like I need two models, `entities` and `tags`. Entity has `type`, tag has
+ `text`. Let's start with that and tests for these models & relationship.
 
 
 * * *

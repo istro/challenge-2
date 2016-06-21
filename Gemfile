@@ -14,6 +14,7 @@ group :development, :test do
   # same debugging options with `binding.pry` command
   gem 'pry'
   gem 'better_errors'
+  gem 'rspec-rails'
 end
 
 group :development do
