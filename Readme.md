@@ -1,3 +1,18 @@
+## Notes as I go along:
+
+- Haven't built a rails app from scratch in... years. My experience has been mostly
+front-end, but much more full-stack at my previous job (Chalk).
+- Cleaning up default `Gemfile` found out about `Jbuilder`. This is probably
+something that would be useful for this exercise - but I will forgo learning about
+it as it seems like a rabbit hole that might take up more time than two hours
+allotted.
+-
+
+
+* * *
+
+# Instructions:
+
 # Generic Tagging JSON API
 
 We will be building a Generic Tagging JSON API that can store, retrieve, delete and report on the usage of a "tag" across different entities. This is a guide for the endpoints, if you think you have a better route or would like to modify the naming/schema feel free.
