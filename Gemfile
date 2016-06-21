@@ -15,6 +15,7 @@ group :development, :test do
   gem 'pry'
   gem 'better_errors'
   gem 'rspec-rails'
+  gem 'responders'
 end
 
 group :development do

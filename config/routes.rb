@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+
+  post :tags, constraints: { format: 'json' }, to: 'entities#create'
+
+  scope :tags, constraints: { format: 'json' } do
+    get ':entity_type/:entity_id', to: 'entities#show'
+    delete':entity_type/:entity_id', to: 'entities#destroy'
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

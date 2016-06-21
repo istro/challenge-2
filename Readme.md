@@ -14,6 +14,22 @@
   after I've used up my 2h following the instructions.
 - Seems like I need two models, `entities` and `tags`. Entity has `type`, tag has
  `text`. Let's start with that and tests for these models & relationship.
+- Woah, tests took more minutes to configure than I had hoped. Oh well. So,
+  onwards - going from lower level out, next bit necessary would be controllers
+  to allow creating, reading and deleting entities with tags. As we would be
+  manipulating `Entity` objects seems like `entities_controller` is the right
+  place to put that code.
+
+So. Just added a controller with appropriate actions and made routes match what
+the instructions asked for (also, of course - added tests). At that moment, 2h
+that I was supposed to spend on the task has expired.
+
+Because next bits - fleshing out create/show/destroy actions & tests - are the
+meat and gravy of the exersize, and because most of the first hour I spent
+setting up and configuring the newly-minted rails app -  I will carry on and spend
+a bit more time getting at least that bit done. Won't get to the stats, but will
+at least get taggability working.
+
 
 
 * * *
