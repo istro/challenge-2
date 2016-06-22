@@ -24,6 +24,18 @@ class EntitiesController < ApplicationController
   end
 
   def show
+    result = {}
+    entity = Entity.includes(:tags).where(
+      entity_identifier: params[:entity_id],
+      text: params[:entity_type]
+    ).last
+    if (entity)
+      result = {
+        entity: entity,
+        tags: entity.tags
+      }
+    end
+    render json: result, status: :ok
   end
 
   def destroy

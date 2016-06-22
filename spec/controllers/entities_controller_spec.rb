@@ -85,13 +85,70 @@ RSpec.describe EntitiesController, type: :controller do
 
   describe '#show' do
     before(:each) do
-      # create two entities, one with tags, one without
+      params_1 = {
+        format: :json,
+        entity_id: 'lewis',
+        entity_type: 'formula_1',
+        tags: ['champion']
+      }
+      params_2 = {
+        format: :json,
+        entity_id: 'nico',
+        entity_type: 'formula_1',
+        tags: []
+      }
+      # not entirely sure if this is cool - relying on create action to make
+      # tags... But, it's tested above, so should be okay
+      post(:create, params_1)
+      post(:create, params_2)
     end
 
-    it 'returns the entity if one is found'
-    it 'returns an empty object if there is not one found'
-    it 'returns associated tags if there are any'
-    it 'returns no tags if there are none associated'
+    it 'returns the entity if one is found' do
+      params = {
+        format: :json,
+        entity_id: 'lewis',
+        entity_type: 'formula_1'
+      }
+      get(:show, params)
+      returned_value = JSON.parse(response.body)
+      expect(returned_value['entity']['text']).to eq(params[:entity_type])
+      expect(returned_value['entity']['entity_identifier']).to eq(params[:entity_id])
+    end
+
+    it 'returns an empty object if there is no entity found' do
+      params = {
+        format: :json,
+        entity_id: 'ivan',
+        entity_type: 'formula_1'
+      }
+      get(:show, params)
+      expect(response.body).to eq('{}')
+    end
+
+    it 'returns associated tags if there are any' do
+      params = {
+        format: :json,
+        entity_id: 'lewis',
+        entity_type: 'formula_1'
+      }
+      get(:show, params)
+      returned_value = JSON.parse(response.body)
+      expect(returned_value['tags'].length).to eq(1)
+
+      tag = returned_value['tags'].first
+      expect(tag['text']).to eq('champion')
+    end
+
+    it 'returns no tags if there are none associated' do
+      params = {
+        format: :json,
+        entity_id: 'nico',
+        entity_type: 'formula_1'
+      }
+      get(:show, params)
+      returned_value = JSON.parse(response.body)
+      expect(returned_value['tags'].length).to eq(0)
+    end
   end
 
   describe '#destroy' do
