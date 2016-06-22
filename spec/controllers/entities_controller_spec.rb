@@ -4,8 +4,38 @@ RSpec.describe EntitiesController, type: :controller do
 
   describe '#create' do
     describe 'new entity' do
-      it 'creates a new entity with type from params'
-      it 'creates new tags from params'
+      let(:params) do
+        {
+          format: :json,
+          entity_id: 'bubcrowd',
+          entity_type: 'typo',
+          tags: ['non-critical', 'bugs']
+        }
+      end
+
+      it 'creates a new entity with type from params' do
+        expect do
+          post(:create, params)
+        end.to change(Entity, :count).by(1)
+      end
+
+      it 'creates new tags from params' do
+        expect do
+          post(:create, params)
+        end.to change(Tag, :count).by(2)
+      end
+
+      it 'associates new tags with new entity' do
+        post(:create, params)
+
+        entity = Entity.where(
+          entity_identifier: params[:entity_id],
+          text: params[:entity_type]
+        ).last
+
+        tags = entity.tags.collect(&:text)
+        expect(tags).to eq(params[:tags])
+      end
     end
     describe 'existing entity' do
       it 'does not create a new entity'
