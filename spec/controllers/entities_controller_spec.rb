@@ -153,11 +153,51 @@ RSpec.describe EntitiesController, type: :controller do
 
   describe '#destroy' do
     before(:each) do
-      # create two entities with some shared and some exclusive tags
+      params_1 = {
+        format: :json,
+        entity_id: 'lewis',
+        entity_type: 'formula_1',
+        tags: ['champion', 'mercedes']
+      }
+      params_2 = {
+        format: :json,
+        entity_id: 'nico',
+        entity_type: 'formula_1',
+        tags: ['mercedes']
+      }
+      # not entirely sure if this is cool - relying on create action to make
+      # tags... But, it's tested above, so should be okay
+      post(:create, params_1)
+      post(:create, params_2)
     end
 
-    it 'deletes the entity'
-    it 'deletes all tags exclusive to that entity'
-    it 'does not delete tags shared by other entities'
+    let(:params) do
+      {
+        format: :json,
+        entity_id: 'lewis',
+        entity_type: 'formula_1'
+      }
+    end
+
+    it 'deletes the entity' do
+      expect do
+        delete(:destroy, params)
+      end.to change(Entity, :count).by(-1)
+      expect(Entity.find_by_entity_identifier('lewis')).to be_nil
+    end
+
+    it 'deletes all tags exclusive to that entity' do
+      expect do
+        delete(:destroy, params)
+      end.to change(Tag, :count).by(-1)
+      expect(Tag.find_by_text('champion')).to be_nil
+    end
+
+    it 'does not delete tags shared by other entities' do
+      expect(Tag.find_by_text('mercedes').entities.count).to eq(2)
+      delete(:destroy, params)
+      expect(Tag.find_by_text('mercedes')).to_not be_nil
+      expect(Tag.find_by_text('mercedes').entities.count).to eq(1)
+    end
   end
 end

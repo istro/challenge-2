@@ -12,7 +12,7 @@ class EntitiesController < ApplicationController
     new_tags = tags_to_create(entity: @entity, new_tag_list: params[:tags])
 
     new_tags.each do |tag_text|
-      tag = Tag.create(text: tag_text)
+      tag = Tag.find_or_create_by(text: tag_text)
       tag.entities << @entity
     end
 
@@ -25,7 +25,7 @@ class EntitiesController < ApplicationController
 
   def show
     result = {}
-    entity = Entity.includes(:tags).where(
+    entity = Entity.where(
       entity_identifier: params[:entity_id],
       text: params[:entity_type]
     ).last
@@ -39,6 +39,19 @@ class EntitiesController < ApplicationController
   end
 
   def destroy
+    entity = Entity.where(
+      entity_identifier: params[:entity_id],
+      text: params[:entity_type]
+    ).last
+    if (entity)
+      # not sure why, but doing `clone` or `dup` on array of tags did not
+      # preserve them in this var after the entity got destroyed.
+      tags = []
+      tags += entity.tags
+      entity.destroy
+      remove_orphaned_tags(tags)
+    end
+    render nothing: true, status: :ok
   end
 
   private
@@ -51,5 +64,11 @@ class EntitiesController < ApplicationController
   def tags_to_create(entity:, new_tag_list:)
     old_tags = entity.tags.collect(&:text)
     new_tag_list - old_tags
+  end
+
+  def remove_orphaned_tags(tags)
+    tags.each do |tag|
+      tag.destroy if tag.entities.length == 0
+    end
   end
 end

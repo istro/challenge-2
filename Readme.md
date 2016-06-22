@@ -31,13 +31,16 @@ a bit more time getting at least that bit done. Won't get to the stats, but will
 at least get taggability working.
 
 ... Came back to this challenge 6h later. Will try to TDD the entities
-controller in an hour.
+controller, even though that's taking me longer than allowed 2h.
 
 Discovered while writing tests that `Entities` need another attribute, and that it
 would probably be better to have a join table between entities & tags to avoid
 creating duplicate tags with same text.
 Added a migration for db changes, wrote test descriptions for the controller.
 
+Ok, a few more hours later - done! Yay, test-driving it was pretty fun, actually. A
+lot less intimidating, because only needed to think about one thing at a time. Time
+to go to sleep, and send this off.
 
 
 * * *
