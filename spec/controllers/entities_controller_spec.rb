@@ -1,18 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe EntitiesController, type: :controller do
-
   describe '#create' do
-    describe 'new entity' do
-      let(:params) do
-        {
-          format: :json,
-          entity_id: 'bubcrowd',
-          entity_type: 'typo',
-          tags: ['non-critical', 'bugs']
-        }
-      end
+    let(:params) do
+      {
+        format: :json,
+        entity_id: 'bubcrowd',
+        entity_type: 'typo',
+        tags: ['non-critical', 'bugs']
+      }
+    end
 
+    describe 'new entity' do
       it 'creates a new entity with type from params' do
         expect do
           post(:create, params)
@@ -37,11 +36,50 @@ RSpec.describe EntitiesController, type: :controller do
         expect(tags).to eq(params[:tags])
       end
     end
+
     describe 'existing entity' do
-      it 'does not create a new entity'
-      it 'removes old tags if they are not present in current params'
-      it 'does not remove old tags if they are present in current params'
-      it 'creates new tags if there are any new ones'
+      before(:each) do
+        post(:create, params)
+        params[:tags] = %w(security critical bugs)
+        post(:create, params)
+      end
+
+      let(:entity) do
+        Entity.where(
+          entity_identifier: params[:entity_id],
+          text: params[:entity_type]
+        ).last
+      end
+
+      let(:tags) do
+        entity.tags.collect(&:text)
+      end
+
+      it 'does not create a new entity' do
+        expect do
+          post(:create, params)
+        end.to_not change(Entity, :count)
+      end
+
+      it 'removes old tags if they are not present in current params' do
+        expect(Tag.find_by_text('non-critical')).to be_nil
+        expect(tags).to_not include('non-critical')
+      end
+
+      it 'does not remove old tags if they are present in current params' do
+        # I was looking to ensure the overlapping "bugs" tag didn't get
+        # overwritten, and looked into slowing down time in rspec to ensure that
+        # was the oldest of the three... There are additional gems for that, but
+        # seems too complicated for current task. Earlier ID will verify that
+        # well enough.
+        tag_objects = entity.tags.order(:id)
+        expect(tag_objects.first.text).to eq('bugs')
+      end
+
+      it 'creates new tags if there are any new ones' do
+        expect(Tag.find_by_text('security')).to_not be_nil
+        expect(tags).to include('security')
+      end
     end
   end
 
