@@ -1,4 +1,31 @@
-## Notes as I go along:
+# Architectural findings
+
+- First of all - my experience being mostly on the front-end, it did take me a
+  while longer than expected. I did not get to statistics at all. It took me
+  an hour to configure the basics :-/. I feel that particular hindrance is not
+  really representative of day-to-day tasks though.
+- Considering the above, I decided to focus on writing really thorough tests, with
+  hopes that it would lead me to making better design decisions in areas where I'm
+  weak (database stuff). It paid off.
+- Instructions called for replacing all tags if entity already existed - but it
+  seemed more efficient to only create new ones for changed tags, and delete the
+  ones that are no longer present. Implemented it that way and also tested that
+  this is actually what's happening.
+- Instructions called for deleting all the tags when entity would be deleted - but
+  it seemed more efficient to allow same tag to be shared by multiple entities, so
+  instead I delete only tags that have no entities left.
+- On final note - I found routes prescribed in instructions a little excessive
+  (didn't feel the need for both `entity_id` and `entity_type` to be dynamic),
+  however made them work exactly as requested.
+
+#### Running tests:
+Just run
+
+```
+rspec
+```
+
+## Notes as I was going along:
 
 - Haven't built a rails app from scratch in... years. My experience has been
   mostly front-end, but much more full-stack at my previous job (Chalk).
@@ -19,8 +46,7 @@
   to allow creating, reading and deleting entities with tags. As we would be
   manipulating `Entity` objects seems like `entities_controller` is the right
   place to put that code.
-
-So. Just added a controller with appropriate actions and made routes match what
+-  Just added a controller with appropriate actions and made routes match what
 the instructions asked for (also, of course - added tests). At that moment, 2h
 that I was supposed to spend on the task has expired.
 
@@ -30,6 +56,8 @@ setting up and configuring the newly-minted rails app -  I will carry on and spe
 a bit more time getting at least that bit done. Won't get to the stats, but will
 at least get taggability working.
 
+
+---
 ... Came back to this challenge 6h later. Will try to TDD the entities
 controller, even though that's taking me longer than allowed 2h.
 
